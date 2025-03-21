@@ -1,98 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style/draw.css">
-  <title>Sammlung Aller Dinge</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeichnen & Senden</title>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Zeichne hier</h1>
+        <canvas id="drawingCanvas" width="800" height="600"></canvas>
+        <button id="sendButton">Zeichnung senden</button>
+    </div>
 
+    <script src="script.js">
 
-  <div class="container">
-       <canvas id="drawingCanvas"></canvas>
-   </div>
+    const canvas = document.getElementById("drawingCanvas");
+    const ctx = canvas.getContext("2d");
 
-   <script src="script.js"></script>
-
-    <script>
-    // Canvas und Context-Setup
-    const canvas = document.getElementById('drawingCanvas');
-    const ctx = canvas.getContext('2d');
-    const clearButton = document.getElementById('clearButton');
-
-    // Canvas-Größe dynamisch anpassen
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
-    // Beim Laden und Ändern der Fenstergröße das Canvas anpassen
-    window.addEventListener('load', resizeCanvas);
-    window.addEventListener('resize', resizeCanvas);
-
-    // Variablen für das Zeichnen
-    let drawing = false;
+    let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
-    let lineWidth = 5;
-    ctx.lineWidth = lineWidth;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
 
-    // Funktionen für das Zeichnen
-    function startDrawing(e) {
-        drawing = true;
-        [lastX, lastY] = getCoordinates(e);
+    // Funktionen zum Zeichnen
+    function startDrawing(event) {
+        isDrawing = true;
+        [lastX, lastY] = getCoordinates(event);
     }
 
     function stopDrawing() {
-        drawing = false;
+        isDrawing = false;
     }
 
-    function draw(e) {
-        if (!drawing) return;
-        const [x, y] = getCoordinates(e);
+    function draw(event) {
+        if (!isDrawing) return;
+
+        const [x, y] = getCoordinates(event);
+
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(x, y);
         ctx.stroke();
+
         [lastX, lastY] = [x, y];
     }
 
-    // Hilfsfunktion zur Bestimmung der Maus- oder Touch-Position
-    function getCoordinates(e) {
-        if (e.touches) {
-            return [e.touches[0].clientX, e.touches[0].clientY];
-        }
-        return [e.clientX, e.clientY];
+    function getCoordinates(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        return [x, y];
     }
 
-    // Event-Listener für das Zeichnen
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseleave', stopDrawing);
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mousemove", draw);
 
-    // Event-Listener für Touchscreen
-    canvas.addEventListener('touchstart', (e) => startDrawing(e));
-    canvas.addEventListener('touchmove', (e) => draw(e));
-    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener("touchstart", (event) => {
+        event.preventDefault();
+        startDrawing(event.touches[0]);
+    });
+    canvas.addEventListener("touchend", stopDrawing);
+    canvas.addEventListener("touchmove", (event) => {
+        event.preventDefault();
+        draw(event.touches[0]);
+    });
 
-    // Funktion zum Löschen des Canvas
-    clearButton.addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Funktion zum Senden der Zeichnung per E-Mail
+    document.getElementById("sendButton").addEventListener("click", function() {
+        const drawingData = canvas.toDataURL(); // Die Zeichnung als Bild-URL
+
+        const emailBody = encodeURIComponent(`Bitte finden Sie die Zeichnung im Anhang: \n\n${drawingData}`);
+        const mailtoLink = `mailto:example@example.com?subject=Zeichnung&body=${emailBody}`;
+
+        window.location.href = mailtoLink; // Öffnet den E-Mail-Client
     });
 
 
     </script>
-    <footer>
-
-      <id id="navibereich">
-        <ul>
-          <li id="navigation"><a href="index.html">Sammlung Aller Dinge</a></li>
-        </ul>
-      </id>
-    </footer>
 </body>
 </html>
