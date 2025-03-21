@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style/draw.css">
+  <title>Sammlung Aller Dinge</title>
+</head>
+<body>
+
+
+  <div class="container">
+       <canvas id="drawingCanvas"></canvas>
+       <button id="clearButton">Löschen</button>
+   </div>
+
+   <script src="script.js"></script>
+
+    <script>
+    // Canvas und Context-Setup
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    const clearButton = document.getElementById('clearButton');
+
+    // Canvas-Größe dynamisch anpassen
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    // Beim Laden und Ändern der Fenstergröße das Canvas anpassen
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+    // Variablen für das Zeichnen
+    let drawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let lineWidth = 5;
+    ctx.lineWidth = lineWidth;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    // Funktionen für das Zeichnen
+    function startDrawing(e) {
+        drawing = true;
+        [lastX, lastY] = getCoordinates(e);
+    }
+
+    function stopDrawing() {
+        drawing = false;
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+        const [x, y] = getCoordinates(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        [lastX, lastY] = [x, y];
+    }
+
+    // Hilfsfunktion zur Bestimmung der Maus- oder Touch-Position
+    function getCoordinates(e) {
+        if (e.touches) {
+            return [e.touches[0].clientX, e.touches[0].clientY];
+        }
+        return [e.clientX, e.clientY];
+    }
+
+    // Event-Listener für das Zeichnen
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+
+    // Event-Listener für Touchscreen
+    canvas.addEventListener('touchstart', (e) => startDrawing(e));
+    canvas.addEventListener('touchmove', (e) => draw(e));
+    canvas.addEventListener('touchend', stopDrawing);
+
+    // Funktion zum Löschen des Canvas
+    clearButton.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+
+    </script>
+    <footer>
+
+      <id id="navibereich">
+        <ul>
+          <li id="navigation"><a href="07.html">07</a></li><br>
+          <li id="navigation"><a href="06.html">06</a></li><br>
+          <li id="navigation"><a href="05.html">05</a></li><br>
+          <li id="navigation"><a href="04.html">04</a></li><br>
+          <li id="navigation"><a href="03.html">03</a></li><br>
+          <li id="navigation"><a href="02.html">02</a></li><br>
+          <li id="navigation"><a href="01.html">01</a></li><br>
+          <li id="navigation"><a href="randomizer.html">Randomizer</a></li><br>
+          <li id="navigation"><a href="index.html">Sammlung Aller Dinge</a></li>
+        </ul>
+      </id>
+
+      <p class="footer">Eine Sammlung erstellt von Lisa Steiger anhand subjektiver Interesse.<br>Keine Ansprüche auf allgemeines Interesse.</p>
+    </footer>
+</body>
+</html>
