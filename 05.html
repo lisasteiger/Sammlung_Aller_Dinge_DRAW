@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style/main.css">
+  <title>Sammlung Aller Dinge</title>
+</head>
+<body>
+
+
+    <div class="gallery" id="gallery">
+      <img src="assets/5_01.png" alt="Bild 1">
+      <img src="assets/5_02.png" alt="Bild 2">
+      <img src="assets/5_03.png" alt="Bild 3">
+      <img src="assets/5_04.png" alt="Bild 4">
+      <img src="assets/5_05.png" alt="Bild 1">
+      <img src="assets/5_06.png" alt="Bild 1">
+      <img src="assets/5_07.png" alt="Bild 2">
+      <img src="assets/5_08.png" alt="Bild 3">
+      <img src="assets/5_09.png" alt="Bild 4">
+      <img src="assets/5_11.png" alt="Bild 1">
+      <img src="assets/5_12.png" alt="Bild 2">
+      <img src="assets/5_13.png" alt="Bild 3">
+      <img src="assets/5_14.png" alt="Bild 4">
+      <img src="assets/5_15.png" alt="Bild 1">
+      <img src="assets/5_16.png" alt="Bild 1">
+      <img src="assets/5_17.png" alt="Bild 2">
+      <img src="assets/5_18.png" alt="Bild 3">
+      <img src="assets/5_19.png" alt="Bild 4">
+      <img src="assets/5_20.png" alt="Bild 1">
+      <img src="assets/5_21.png" alt="Bild 1">
+      <img src="assets/5_22.png" alt="Bild 2">
+      <img src="assets/5_23.png" alt="Bild 3">
+      <img src="assets/5_24.png" alt="Bild 4">
+      <img src="assets/5_25.png" alt="Bild 1">
+      <img src="assets/5_26.png" alt="Bild 1">
+      <img src="assets/5_27.png" alt="Bild 2">
+      <img src="assets/5_28.png" alt="Bild 3">
+      <img src="assets/5_29.png" alt="Bild 4">
+      <img src="assets/5_30.png" alt="Bild 1">
+      <img src="assets/5_31.png" alt="Bild 1">
+    </div>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        const images = gallery.querySelectorAll('img');
+        let columnState = 6; // Startzustand: 6 Spalten
+
+        gallery.addEventListener('click', (event) => {
+            const clickedImage = event.target;
+
+            // Prüfen, ob auf ein Bild geklickt wurde
+            if (clickedImage.tagName.toLowerCase() === 'img') {
+                // Hervorhebung zurücksetzen
+                images.forEach(img => img.classList.remove('active'));
+
+                // Markiere das angeklickte Bild
+                clickedImage.classList.add('active');
+
+                // Position des angeklickten Bildes relativ zur Seite ermitteln
+                const imageOffsetTop = clickedImage.getBoundingClientRect().top + window.scrollY;
+
+                // Temporär das Scroll-Verhalten deaktivieren
+                document.body.classList.add('no-scroll');
+
+                // Spaltenlayout wechseln
+                if (columnState === 6) {
+                    columnState = 2;
+                    gallery.classList.remove('one-column');
+                    gallery.classList.add('two-columns');
+                } else if (columnState === 2) {
+                    columnState = 1;
+                    gallery.classList.remove('two-columns');
+                    gallery.classList.add('one-column');
+                } else {
+                    columnState = 6;
+                    gallery.classList.remove('one-column');
+                    gallery.classList.remove('two-columns');
+                }
+
+                // Verschiebe das angeklickte Bild nach vorne im DOM
+                gallery.insertBefore(clickedImage, gallery.firstChild);
+
+                // Nach dem Layout-Wechsel zur Position des angeklickten Bildes scrollen
+                setTimeout(() => {
+                    const newImageOffsetTop = clickedImage.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo(0, newImageOffsetTop - imageOffsetTop);
+
+                    // Scroll-Verhalten wieder aktivieren
+                    document.body.classList.remove('no-scroll');
+                }, 300); // Timeout entspricht der Transition-Dauer aus dem CSS
+            }
+        });
+    </script>
+    <footer>
+
+      <id id="navibereich">
+        <ul>
+          <li id="navigation"><a href="07.html">07</a></li><br>
+          <li id="navigation"><a href="06.html">06</a></li><br>
+          <li id="navigation"><a href="05.html">05</a></li><br>
+          <li id="navigation"><a href="04.html">04</a></li><br>
+          <li id="navigation"><a href="03.html">03</a></li><br>
+          <li id="navigation"><a href="02.html">02</a></li><br>
+          <li id="navigation"><a href="01.html">01</a></li><br>
+          <li id="navigation"><a href="randomizer.html">Randomizer</a></li><br>
+          <li id="navigation"><a href="index.html">Sammlung Aller Dinge</a></li>
+        </ul>
+      </id>
+
+      <p class="footer">Eine Sammlung erstellt von Lisa Steiger anhand subjektiver Interesse.<br>Keine Ansprüche auf allgemeines Interesse.</p>
+    </footer>
+</body>
+</html>

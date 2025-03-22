@@ -1,100 +1,115 @@
-// Supabase Setup (ersetze mit deinen eigenen Keys)
-const SUPABASE_URL = "https://rwcdjixwvrskyktfyqoq.supabase.co"; // Deine Supabase URL
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3Y2RqaXh3dnJza3lrdGZ5cW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1NTQ3OTQsImV4cCI6MjA1ODEzMDc5NH0.SqHIaFw9sYtQD90JjpkdLjGxRdpYXZggD3K5RGtvnws"; // Dein Supabase Anon Key
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Holen des Canvas-Elements und des Kontextes
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
 
-// Canvas Setup
-const canvas = document.getElementById("drawingCanvas");
-const ctx = canvas.getContext("2d");
+// Setze die Canvas-Größe auf die Bildschirmgröße
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-let painting = false;
+// Variablen für das Zeichnen
+let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
 
-// Canvas-Einstellungen
-ctx.lineWidth = 5;
-ctx.lineCap = "round";
-ctx.strokeStyle = "black";
+// Standardwerte für den Strich
+let strokeColor = '#000000'; // Standardfarbe: Schwarz
+let lineWidth = 5; // Standard Strichbreite
 
-// Event Listener für Desktop (Maus)
-canvas.addEventListener("mousedown", startPosition);
-canvas.addEventListener("mouseup", endPosition);
-canvas.addEventListener("mousemove", draw);
-
-// Event Listener für Touch (Mobile)
-canvas.addEventListener("touchstart", startPosition);
-canvas.addEventListener("touchend", endPosition);
-canvas.addEventListener("touchmove", draw);
-
-// Startet das Zeichnen (beim Drücken der Maustaste oder Touch)
-function startPosition(e) {
-    e.preventDefault(); // Verhindert, dass der Browser seine Standardaktionen ausführt
-    painting = true;
-
-    // Bestimme die Position, wo die Maus oder der Touch gestartet wurde
-    const rect = canvas.getBoundingClientRect();
-    lastX = (e.clientX || e.touches[0].clientX) - rect.left;
-    lastY = (e.clientY || e.touches[0].clientY) - rect.top;
-
-    draw(e); // Sofort das Zeichnen starten
+// Funktion zum Starten des Zeichnens
+function startDrawing(e) {
+    isDrawing = true;
+    // Mausposition relativ zum Canvas ermitteln
+    const rect = canvas.getBoundingClientRect(); // Position des Canvas relativ zum Viewport
+    lastX = e.clientX - rect.left;
+    lastY = e.clientY - rect.top;
 }
 
-// Stoppt das Zeichnen (beim Loslassen der Maustaste oder Touch)
-function endPosition() {
-    painting = false;
-    ctx.beginPath(); // Startet einen neuen Pfad, um den aktuellen zu schließen
+// Funktion zum Stoppen des Zeichnens
+function stopDrawing() {
+    isDrawing = false;
 }
 
-// Zeichnen auf dem Canvas
+// Funktion zum Zeichnen
 function draw(e) {
-    if (!painting) return; // Zeichnen nur, wenn painting true ist
+    if (!isDrawing) return; // Wenn nicht gezeichnet wird, nichts tun
 
-    e.preventDefault(); // Verhindert, dass der Browser scrollt oder andere Aktionen ausführt
+    const rect = canvas.getBoundingClientRect(); // Position des Canvas relativ zum Viewport
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
 
-    // Bestimme die aktuelle Maus- oder Touchposition
-    const rect = canvas.getBoundingClientRect();
-    const currentX = (e.clientX || e.touches[0].clientX) - rect.left;
-    const currentY = (e.clientY || e.touches[0].clientY) - rect.top;
+    // Setze die Stricheinstellungen
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
 
-    // Zeichnen der Linie
-    ctx.lineTo(currentX, currentY);
-    ctx.stroke(); // Strich ziehen
-    ctx.beginPath(); // Einen neuen Pfad beginnen
-    ctx.moveTo(currentX, currentY); // Setze den neuen Startpunkt des Striches
+    // Linien zeichnen
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY); // Beginne an der letzten Position
+    ctx.lineTo(currentX, currentY); // Ziehe eine Linie zur aktuellen Mausposition
+    ctx.stroke(); // Linie wird gezeichnet
+
+    // Speichern der neuen Position
+    lastX = currentX;
+    lastY = currentY;
 }
 
-// Funktion zum Speichern der Zeichnung in Supabase
-async function saveToSupabase() {
-    const text = document.getElementById("textInput").value;
-    const imageData = canvas.toDataURL("image/png"); // Zeichnung als Base64 speichern
+// Event-Listener für das Zeichnen
+canvas.addEventListener('mousedown', startDrawing); // Beim Klicken der Maus
+canvas.addEventListener('mousemove', draw); // Beim Bewegen der Maus
+canvas.addEventListener('mouseup', stopDrawing); // Beim Loslassen der Maus
+canvas.addEventListener('mouseout', stopDrawing); // Wenn Maus den Canvas verlässt
 
-    if (!text.trim() || !imageData) {
-        alert("Bitte eine Zeichnung und einen Text hinzufügen!");
-        return;
+// Event-Listener für den "Löschen"-Button
+const clearButton = document.getElementById('clearButton');
+clearButton.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas löschen
+});
+
+// Event-Listener für die Auswahl der Strichfarbe
+const colorPicker = document.getElementById('colorPicker');
+colorPicker.addEventListener('change', (e) => {
+    strokeColor = e.target.value; // Die Farbe wird auf den Wert des Auswahlfelds gesetzt
+});
+
+// Event-Listener für die Auswahl der Strichbreite
+const lineWidthInput = document.getElementById('lineWidth');
+lineWidthInput.addEventListener('input', (e) => {
+    lineWidth = e.target.value; // Die Strichbreite wird auf den Wert des Schiebereglers gesetzt
+});
+
+// Funktion zum Senden der Zeichnung per E-Mail
+const sendButton = document.getElementById('sendButton');
+sendButton.addEventListener('click', () => {
+    // Canvas als Bild exportieren (Base64)
+    const imageData = canvas.toDataURL('image/png');
+
+    // Mailto-Link erstellen (mit Bild als Anhang)
+    const email = 'lisa_steiger@hotmail.com';
+    const subject = 'Zeichnung von der Website';
+    const body = 'Hier ist die Zeichnung, die Sie angefordert haben.\n\n' +
+                 'Bild der Zeichnung:\n' + imageData;
+
+    // Mailto-Link mit E-Mail, Betreff und Body erstellen
+    window.location.href = mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)};
+});
+
+
+const saveButton = document.getElementById('saveButton');
+
+saveButton.addEventListener('click', async () => {
+    const imageData = canvas.toDataURL('image/png'); // Zeichnung als Base64-String
+    const drawingText = document.getElementById('drawingText').value; // Text erfassen
+
+    // Daten als JSON an den Server senden
+    const response = await fetch('/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: imageData, text: drawingText })
+    });
+
+    if (response.ok) {
+        alert('Zeichnung gespeichert!');
+        location.reload(); // Webseite neu laden
+    } else {
+        alert('Fehler beim Speichern!');
     }
-
-    // Debugging: Sicherstellen, dass das Bild korrekt generiert wurde
-    console.log("Bilddaten:", imageData);
-
-    try {
-        const { data, error } = await supabase
-            .from("drawings")
-            .insert([{ image: imageData, text: text }]);
-
-        if (error) {
-            console.error("Fehler beim Speichern:", error.message); // Fehlerausgabe in der Konsole
-            alert("Fehler beim Speichern! Siehe Konsole für Details.");
-        } else {
-            console.log("Gespeichert:", data); // Erfolgsausgabe in der Konsole
-            alert("Erfolgreich gespeichert!");
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas löschen
-            document.getElementById("textInput").value = ""; // Textfeld leeren
-        }
-    } catch (err) {
-        console.error("Fehler bei der Supabase-Abfrage:", err);
-        alert("Fehler bei der Verbindung mit Supabase. Siehe Konsole für Details.");
-    }
-}
-
-// Event Listener für den "Speichern"-Button
-document.getElementById("saveButton").addEventListener("click", saveToSupabase);
+});
