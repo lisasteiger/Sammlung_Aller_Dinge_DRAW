@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/draw.css">
     <title>Zeichnen mit Finger oder Maus</title>
-    <style></style>
 </head>
 <body>
+    <div class="controls">
+        <label for="colorPicker">Farbe:</label>
+        <input type="color" id="colorPicker" value="#000000">
+        <label for="thickness">Dicke:</label>
+        <input type="range" id="thickness" min="1" max="20" value="5">
+    </div>
+
     <canvas id="canvas"></canvas>
+
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -16,12 +23,23 @@
         canvas.height = window.innerHeight;
 
         let drawing = false;
+        let color = "#000000";
+        let lineWidth = 5;
+
+        const colorPicker = document.getElementById("colorPicker");
+        const thickness = document.getElementById("thickness");
+
+        colorPicker.addEventListener("input", (e) => color = e.target.value);
+        thickness.addEventListener("input", (e) => lineWidth = e.target.value);
 
         function startDraw(e) {
             e.preventDefault();
             drawing = true;
             ctx.beginPath();
             ctx.moveTo(getX(e), getY(e));
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = "round";
         }
 
         function draw(e) {
