@@ -1,47 +1,10 @@
-body {
+body, html {
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Verhindert das Erscheinen von Scrollbalken */
+    overflow: hidden;
+    touch-action: none;
 }
-
-.container {
-    text-align: center;
-    position: relative;
-    z-index: 10;
-}
-
 canvas {
-    background-color: white;
-    cursor: crosshair;
-    height: 100vh;
-    width: 100vw;
     display: block;
-}
-
-.controls {
-    position: absolute;
-    top: 20px; /* Abstand von oben */
-    left: 50%;
-    transform: translateX(-50%); /* Zentriert die Controls */
-    z-index: 15; /* Stellt sicher, dass die Controls über dem Canvas liegen */
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-label {
-    font-size: 16px;
-    margin-right: 10px;
+    background: #fff;
 }
