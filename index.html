@@ -1,197 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style/main.css">
-  <title>Sammlung Aller Dinge</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeichnen mit Finger oder Maus</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            touch-action: none;
+        }
+        canvas {
+            display: block;
+            background: #fff;
+        }
+    </style>
 </head>
 <body>
-
-    <div class="gallery" id="gallery">
-        <!-- Beispielbilder -->
-        <img src="assets/1_01.png" alt="Bild 1">
-        <img src="assets/1_02.png" alt="Bild 2">
-        <img src="assets/1_03.png" alt="Bild 3">
-        <img src="assets/1_04.png" alt="Bild 4">
-        <img src="assets/1_05.png" alt="Bild 4">
-        <img src="assets/2_01.png" alt="Bild 1">
-        <img src="assets/2_02.png" alt="Bild 2">
-        <img src="assets/2_03.png" alt="Bild 3">
-        <img src="assets/2_04.png" alt="Bild 4">
-        <img src="assets/2_05.png" alt="Bild 1">
-        <img src="assets/2_06.png" alt="Bild 2">
-        <img src="assets/2_07.png" alt="Bild 3">
-        <img src="assets/2_08.png" alt="Bild 4">
-        <img src="assets/2_09.png" alt="Bild 4">
-        <img src="assets/2_10.png" alt="Bild 1">
-        <img src="assets/2_11.png" alt="Bild 4">
-        <img src="assets/2_12.png" alt="Bild 2">
-        <img src="assets/2_13.png" alt="Bild 3">
-        <img src="assets/2_14.png" alt="Bild 4">
-        <img src="assets/2_15.png" alt="Bild 1">
-        <img src="assets/2_16.png" alt="Bild 2">
-        <img src="assets/2_17.png" alt="Bild 3">
-        <img src="assets/2_18.png" alt="Bild 4">
-        <img src="assets/2_20.png" alt="Bild 4">
-        <img src="assets/2_21.png" alt="Bild 1">
-        <img src="assets/2_22.png" alt="Bild 2">
-        <img src="assets/2_23.png" alt="Bild 3">
-        <img src="assets/2_24.png" alt="Bild 4">
-        <img src="assets/2_25.png" alt="Bild 1">
-        <img src="assets/2_26.png" alt="Bild 2">
-        <img src="assets/2_27.png" alt="Bild 3">
-        <img src="assets/2_28.png" alt="Bild 4">
-        <img src="assets/3_01.png" alt="Bild 1">
-        <img src="assets/3_02.png" alt="Bild 2">
-        <img src="assets/3_03.png" alt="Bild 3">
-        <img src="assets/3_04.png" alt="Bild 1">
-        <img src="assets/3_05.png" alt="Bild 2">
-        <img src="assets/3_06.png" alt="Bild 3">
-        <img src="assets/4_01.png" alt="Bild 1">
-        <img src="assets/4_02.png" alt="Bild 2">
-        <img src="assets/4_03.png" alt="Bild 3">
-        <img src="assets/4_04.png" alt="Bild 4">
-        <img src="assets/5_01.png" alt="Bild 1">
-        <img src="assets/5_02.png" alt="Bild 2">
-        <img src="assets/5_03.png" alt="Bild 3">
-        <img src="assets/5_04.png" alt="Bild 4">
-        <img src="assets/5_05.png" alt="Bild 1">
-        <img src="assets/5_06.png" alt="Bild 1">
-        <img src="assets/5_07.png" alt="Bild 2">
-        <img src="assets/5_08.png" alt="Bild 3">
-        <img src="assets/5_09.png" alt="Bild 4">
-        <img src="assets/5_11.png" alt="Bild 1">
-        <img src="assets/5_12.png" alt="Bild 2">
-        <img src="assets/5_13.png" alt="Bild 3">
-        <img src="assets/5_14.png" alt="Bild 4">
-        <img src="assets/5_15.png" alt="Bild 1">
-        <img src="assets/5_16.png" alt="Bild 1">
-        <img src="assets/5_17.png" alt="Bild 2">
-        <img src="assets/5_18.png" alt="Bild 3">
-        <img src="assets/5_19.png" alt="Bild 4">
-        <img src="assets/5_20.png" alt="Bild 1">
-        <img src="assets/5_21.png" alt="Bild 1">
-        <img src="assets/5_22.png" alt="Bild 2">
-        <img src="assets/5_23.png" alt="Bild 3">
-        <img src="assets/5_24.png" alt="Bild 4">
-        <img src="assets/5_25.png" alt="Bild 1">
-        <img src="assets/5_26.png" alt="Bild 1">
-        <img src="assets/5_27.png" alt="Bild 2">
-        <img src="assets/5_28.png" alt="Bild 3">
-        <img src="assets/5_29.png" alt="Bild 4">
-        <img src="assets/5_30.png" alt="Bild 1">
-        <img src="assets/5_31.png" alt="Bild 1">
-        <img src="assets/6_01.png" alt="Bild 1">
-        <img src="assets/6_02.png" alt="Bild 2">
-        <img src="assets/6_03.png" alt="Bild 3">
-        <img src="assets/7_01.png" alt="Bild 1">
-        <img src="assets/7_02.png" alt="Bild 2">
-        <img src="assets/7_03.png" alt="Bild 3">
-        <img src="assets/7_05.png" alt="Bild 1">
-        <img src="assets/7_06.png" alt="Bild 1">
-        <img src="assets/7_07.png" alt="Bild 2">
-        <img src="assets/7_08.png" alt="Bild 3">
-        <img src="assets/7_09.png" alt="Bild 4">
-        <img src="assets/7_11.png" alt="Bild 1">
-        <img src="assets/7_12.png" alt="Bild 2">
-        <img src="assets/7_13.png" alt="Bild 3">
-        <img src="assets/7_14.png" alt="Bild 4">
-        <img src="assets/7_16.png" alt="Bild 1">
-        <img src="assets/7_17.png" alt="Bild 2">
-      </div>
-
+    <canvas id="canvas"></canvas>
     <script>
-        const gallery = document.getElementById('gallery');
-        const images = Array.from(gallery.querySelectorAll('img'));
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        // Funktion zum Mischen der Bilder
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+        let drawing = false;
+
+        function startDraw(e) {
+            e.preventDefault();
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(getX(e), getY(e));
         }
 
-        // Funktion, um die Galerie neu anzuordnen
-        function refreshGalleryOrder() {
-            // Galerie leeren
-            gallery.innerHTML = '';
-
-            // Bilder mischen
-            shuffle(images);
-
-            // Bilder in zufälliger Reihenfolge neu einfügen
-            images.forEach(image => gallery.appendChild(image));
+        function draw(e) {
+            if (!drawing) return;
+            ctx.lineTo(getX(e), getY(e));
+            ctx.stroke();
         }
 
-        // Galerie direkt bei Seitenaufruf durchmischen
-        refreshGalleryOrder();
+        function stopDraw() {
+            drawing = false;
+        }
 
-        let columnState = 6; // Startzustand: 6 Spalten
+        function getX(e) {
+            return e.touches ? e.touches[0].clientX : e.clientX;
+        }
 
-        gallery.addEventListener('click', (event) => {
-            const clickedImage = event.target;
+        function getY(e) {
+            return e.touches ? e.touches[0].clientY : e.clientY;
+        }
 
-            // Prüfen, ob auf ein Bild geklickt wurde
-            if (clickedImage.tagName.toLowerCase() === 'img') {
-                // Hervorhebung zurücksetzen
-                images.forEach(img => img.classList.remove('active'));
+        canvas.addEventListener("mousedown", startDraw);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDraw);
+        canvas.addEventListener("mouseleave", stopDraw);
 
-                // Markiere das angeklickte Bild
-                clickedImage.classList.add('active');
-
-                // Position des angeklickten Bildes relativ zur Seite ermitteln
-                const imageOffsetTop = clickedImage.getBoundingClientRect().top + window.scrollY;
-
-                // Temporär das Scroll-Verhalten deaktivieren
-                document.body.classList.add('no-scroll');
-
-                // Spaltenlayout wechseln
-                if (columnState === 6) {
-                    columnState = 2;
-                    gallery.classList.remove('one-column');
-                    gallery.classList.add('two-columns');
-                } else if (columnState === 2) {
-                    columnState = 1;
-                    gallery.classList.remove('two-columns');
-                    gallery.classList.add('one-column');
-                } else {
-                    columnState = 6;
-                    gallery.classList.remove('one-column');
-                    gallery.classList.remove('two-columns');
-                }
-
-                // Verschiebe das angeklickte Bild nach vorne im DOM
-                gallery.insertBefore(clickedImage, gallery.firstChild);
-
-                // Nach dem Layout-Wechsel zur Position des angeklickten Bildes scrollen
-                setTimeout(() => {
-                    const newImageOffsetTop = clickedImage.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo(0, newImageOffsetTop - imageOffsetTop);
-
-                    // Scroll-Verhalten wieder aktivieren
-                    document.body.classList.remove('no-scroll');
-                }, 300); // Timeout entspricht der Transition-Dauer aus dem CSS
-            }
-        });
+        canvas.addEventListener("touchstart", startDraw, { passive: false });
+        canvas.addEventListener("touchmove", draw, { passive: false });
+        canvas.addEventListener("touchend", stopDraw);
     </script>
-    <footer>
-      <id id="navibereich">
-        <ul>
-          <li id="navigation"><a href="DRAW.html">DRAW</a></li><br>
-          <li id="navigation"><a href="07.html">07</a></li><br>
-          <li id="navigation"><a href="06.html">06</a></li><br>
-          <li id="navigation"><a href="05.html">05</a></li><br>
-          <li id="navigation"><a href="04.html">04</a></li><br>
-          <li id="navigation"><a href="03.html">03</a></li><br>
-          <li id="navigation"><a href="02.html">02</a></li><br>
-          <li id="navigation"><a href="01.html">01</a></li><br>
-          <li id="navigation"><a href="randomizer.html">Randomizer</a></li><br>
-          <li id="navigation"><a href="index.html">Sammlung Aller Dinge</a></li>
-        </ul>
-      </id>
-      <p class="footer">Eine Sammlung erstellt von Lisa Steiger anhand subjektiver Interesse.<br>Keine Ansprüche auf allgemeines Interesse.</p>
-    </footer>
 </body>
 </html>
